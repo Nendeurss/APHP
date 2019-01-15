@@ -1,7 +1,7 @@
 # APHP
 
 ## Description
-A django website to manage hospitals 
+Un site supporté par Django permettant de gérer des hôpitaux
 
 ## Tutorial
 A venir
