@@ -17,9 +17,12 @@ from . import views
 from django.contrib import admin
 from django.urls import path, include, re_path
 from django.views.generic import TemplateView, ListView, DetailView
-
+from django.contrib.auth.views import (
+    LoginView
+)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name="updd/accueil_template.html"), name="accueil"),
+    path('login/', LoginView.as_view(), name="login"),
+
 ]

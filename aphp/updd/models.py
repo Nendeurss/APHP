@@ -82,9 +82,21 @@ class Operation(models.Model):
 		(obst, obst),
 		)
 	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
-	types = models.CharField(max_length=20, verbose_name=_("Type de l'opération"))
+	type = models.CharField(max_length=20, verbose_name=_("Type de l'opération"))
 	libelle = models.CharField(max_length=100, verbose_name=_("Libelle de l'opération"))
 
 class Soin(models.Model):
 	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
 	texte = models.TextField(verbose_name=_("Contenu fiche de soin"))
+
+class Notification(models.Model):
+	raison = models.CharField(max_length=200)
+	content = models.TextField()
+	receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Message(models.Model):
+	objet = models.CharField(max_length=200, verbose_name=_("Objet du message"))
+	author = models.ForeignKey(User, on_delete=models.CASCADE)
+	date_message = models.DateTimeField(auto_now_add=True, verbose_name=_("Date d'envoi du message"))
+	content = models.TextField(verbose_name=_("Contenu du message"))
+	receiver =  models.ForeignKey(User, on_delete=models.CASCADE)

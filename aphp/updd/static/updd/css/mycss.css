@@ -18,7 +18,14 @@ html, body {
 }
 
 .person-role-div {
+    background-color : #6394e2;
+    border-radius : 2px;
+}
+
+.shortcut-button {
     background-color : white;
-    border-radius : 5px;
-    font-weight: 600;
+}
+
+.shortcut-button:hover {
+    background-color : #bec1c6;
 }
