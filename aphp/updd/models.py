@@ -46,7 +46,7 @@ class Secretaire(models.Model):
 
 class Patient(models.Model):
 	user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
-	date_naissance = models.DateField(auto_now=True)
+	date_naissance = models.DateField(auto_now=False)
 	telephone = models.CharField(max_length=15)
 	adresse = models.CharField(max_length=150)
 	numsecu = models.CharField(max_length=15)
@@ -61,7 +61,7 @@ class Document(models.Model):
 	author = models.ForeignKey("Personnel", on_delete=models.CASCADE, verbose_name=_("Auteur"))
 	dossier = models.ForeignKey("DossierMedical", on_delete=models.CASCADE)
 	complet = models.BooleanField(default=False, verbose_name=_("Terminé"))
-	date_creations = models.DateTimeField(auto_now=True)
+	date_creation = models.DateTimeField(auto_now=True)
 
 class Diagnostic(models.Model):
 	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)

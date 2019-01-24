@@ -1,0 +1,18 @@
+html, body {
+ height : 100%;
+}
+
+.left-navbar {
+    background-color :#5189e2;
+    height: 100%;
+    padding-top: 10px;
+}
+
+
+.left-navbar a {
+    color : white !important;
+}
+
+.left-navbar a:hover {
+    text-decoration: underline
+}
