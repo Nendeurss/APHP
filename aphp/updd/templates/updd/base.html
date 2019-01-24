@@ -26,7 +26,7 @@
                 {% if request.user|has_group:"medecin" %}
                     <div class="p-2 person-role-div">Médecin</div>
                 {% elif request.user|has_group:"secretaire" %}
-                    <div class="p-2 person-role-div">Secrétaire</div>
+                    <div class="p-2 person-role-div">Secrétaire, test</div>
                 {% elif request.user|has_group:"infirmier" %}
                     <div class="p-2 person-role-div">Infirmier.ère</div>
                 {% else %}
