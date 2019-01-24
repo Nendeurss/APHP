@@ -16,3 +16,9 @@ html, body {
 .left-navbar a:hover {
     text-decoration: underline
 }
+
+.person-role-div {
+    background-color : white;
+    border-radius : 5px;
+    font-weight: 600;
+}

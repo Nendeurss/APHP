@@ -1,4 +1,5 @@
 {% load static %}
+{% load filters %}
 
 
 <!DOCTYPE html>
@@ -20,15 +21,34 @@
 <div class="container-fluid" style="height:inherit">
     <div class="row"  style="height:inherit">
         <div class="col-md-2 left-navbar"  style="height:inherit">
-             <img src={% static 'updd/img/logoaphp.png' %} class="img-thumbnail" alt="Cinque Terre">
+        <img src={% static 'updd/img/logoaphp.png' %} class="img-thumbnail" alt="Logo APHP">
+            <div class="d-flex justify-content-center mb-3"  style="padding-top:1.8rem;">
+                {% if request.user|has_group:"medecin" %}
+                    <div class="p-2 person-role-div">Médecin</div>
+                {% elif request.user|has_group:"secretaire" %}
+                    <div class="p-2 person-role-div">Secrétaire</div>
+                {% elif request.user|has_group:"infirmier" %}
+                    <div class="p-2 person-role-div">Infirmier.ère</div>
+                {% else %}
+                    <div class="p-2 person-role-div">Aucun rôle</div>
+                {% endif %}
+              </div>
             <hr>
-            <div class="row"><p>[Médecin]</p></div>
             <div class="row">
-                <div class="col-xs-6"> <button type="button" class="btn">Basic</button></div>
-                <div class="col-xs-6"> <button type="button" class="btn">Basic</button></div>
-                <div class="col-xs-6"> <button type="button" class="btn">Basic</button></div>
-                <div class="col-xs-6"> <button type="button" class="btn">Basic</button></div>
-            </div>
+                <table>
+                    <tr>
+                        <div class="col-xs-6"> <button data-toggle="tooltip" title="Messagerie" type="button" class="btn"><i class="fa fa-envelope" aria-hidden="true"></i></button></div>
+                        <th><div class="col-xs-6"> <button data-toggle="tooltip" title="Paramètres" type="button" class="btn"><i class="fa fa-cog" aria-hidden="true"></i></button></div>
+                </th>
+                    </tr>
+                    <tr>
+                        <div class="col-xs-6"> <button data-toggle="tooltip" title="Déconnexion" type="button" class="btn"><i class="fa fa-power-off"></i></button></div>
+                </th>
+                        <th> <div class="col-xs-6"> <button data-toggle="tooltip" title="Notification" type="button" class="btn"><i class="fa fa-circle"></i></button></div>
+            </th>
+                    </tr>
+                </table>
+               </div>
         </div>
         <div class="col-md-10">
             {% block content %}
