@@ -3,100 +3,114 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 
 
-
 class Structure(models.Model):
-	nom = models.CharField(max_length=100)
+    nom = models.CharField(max_length=100)
+
 
 class Hopital(models.Model):
-	structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
+    structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
+
 
 class Pole(models.Model):
-	structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
-	hopital = models.ForeignKey("Hopital", on_delete=models.CASCADE)
+    structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
+    hopital = models.ForeignKey("Hopital", on_delete=models.CASCADE)
 
 
 class Service(models.Model):
-	structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
-	pole = models.ForeignKey("Pole", on_delete=models.CASCADE)
+    structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
+    pole = models.ForeignKey("Pole", on_delete=models.CASCADE)
+
 
 class UH(models.Model):
-	structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
-	service = models.ForeignKey("Service", on_delete=models.CASCADE)
+    structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
+    service = models.ForeignKey("Service", on_delete=models.CASCADE)
+
 
 class US(models.Model):
-	structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
-	uh = models.ForeignKey("UH", on_delete=models.CASCADE)
+    structure = models.OneToOneField("Structure", on_delete=models.CASCADE, primary_key=True)
+    uh = models.ForeignKey("UH", on_delete=models.CASCADE)
+
 
 class Personnel(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-	adresse = models.CharField(max_length=150)
-	telephone = models.CharField(max_length=15)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    adresse = models.CharField(max_length=150)
+    telephone = models.CharField(max_length=15)
+
 
 class Medecin(models.Model):
-	user = models.OneToOneField("Personnel", primary_key=True, on_delete=models.CASCADE)
-	dirigep = models.OneToOneField("Pole",related_name=_("dirige_pole"), on_delete=models.CASCADE)
-	diriges = models.OneToOneField("Service", related_name=_("dirige_service"), on_delete=models.CASCADE)
-	dossiermedical = models.ForeignKey("DossierMedical", on_delete=models.CASCADE, verbose_name=_("Dossier medical"))
+    user = models.OneToOneField("Personnel", primary_key=True, on_delete=models.CASCADE)
+    dirigep = models.OneToOneField("Pole", related_name=_("dirige_pole"), on_delete=models.CASCADE)
+    diriges = models.OneToOneField("Service", related_name=_("dirige_service"), on_delete=models.CASCADE)
+    dossiermedical = models.ForeignKey("DossierMedical", on_delete=models.CASCADE, verbose_name=_("Dossier medical"))
+
 
 class Infirmier(models.Model):
-	user = models.OneToOneField("Personnel", on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField("Personnel", on_delete=models.CASCADE, primary_key=True)
+
 
 class Secretaire(models.Model):
-	user = models.OneToOneField("Personnel", on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField("Personnel", on_delete=models.CASCADE, primary_key=True)
+
 
 class Patient(models.Model):
-	user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
-	date_naissance = models.DateField(auto_now=False)
-	telephone = models.CharField(max_length=15)
-	adresse = models.CharField(max_length=150)
-	numsecu = models.CharField(max_length=15)
-	hospitalisation = models.ForeignKey("US", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE)
+    date_naissance = models.DateField(auto_now=False)
+    telephone = models.CharField(max_length=15)
+    adresse = models.CharField(max_length=150)
+    numsecu = models.CharField(max_length=15)
+    hospitalisation = models.ForeignKey("US", on_delete=models.CASCADE)
 
 
 class DossierMedical(models.Model):
-	patient = models.ForeignKey("Patient", on_delete=models.CASCADE )
+    patient = models.ForeignKey("Patient", on_delete=models.CASCADE)
 
 
 class Document(models.Model):
-	author = models.ForeignKey("Personnel", on_delete=models.CASCADE, verbose_name=_("Auteur"))
-	dossier = models.ForeignKey("DossierMedical", on_delete=models.CASCADE)
-	complet = models.BooleanField(default=False, verbose_name=_("Terminé"))
-	date_creation = models.DateTimeField(auto_now=True)
+    author = models.ForeignKey("Personnel", on_delete=models.CASCADE, verbose_name=_("Auteur"))
+    dossier = models.ForeignKey("DossierMedical", on_delete=models.CASCADE)
+    complet = models.BooleanField(default=False, verbose_name=_("Terminé"))
+    date_creation = models.DateTimeField(auto_now=True)
+
 
 class Diagnostic(models.Model):
-	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
-	fichier = models.FileField()
-	observation = models.TextField()
+    document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
+    fichier = models.FileField()
+    observation = models.TextField()
+
 
 class Ordonnance(models.Model):
-	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
-	texte = models.TextField(verbose_name=_("Contenu ordonnace"))
+    document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
+    texte = models.TextField(verbose_name=_("Contenu ordonnace"))
+
 
 class Operation(models.Model):
-	chir = _("Chirurgie")
-	anest = _("Anesthésie")
-	obst = _("Obstétrique")
-	CHOICES = (
-		(chir, chir),
-		(anest, anest),
-		(obst, obst),
-		)
-	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
-	type = models.CharField(max_length=20, verbose_name=_("Type de l'opération"))
-	libelle = models.CharField(max_length=100, verbose_name=_("Libelle de l'opération"))
+    chir = _("Chirurgie")
+    anest = _("Anesthésie")
+    obst = _("Obstétrique")
+    CHOICES = (
+        (chir, chir),
+        (anest, anest),
+        (obst, obst),
+    )
+    document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
+    type = models.CharField(max_length=20, verbose_name=_("Type de l'opération"))
+    libelle = models.CharField(max_length=100, verbose_name=_("Libelle de l'opération"))
+
 
 class Soin(models.Model):
-	document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
-	texte = models.TextField(verbose_name=_("Contenu fiche de soin"))
+    document = models.OneToOneField("Document", on_delete=models.CASCADE, primary_key=True)
+    texte = models.TextField(verbose_name=_("Contenu fiche de soin"))
+
 
 class Notification(models.Model):
-	raison = models.CharField(max_length=200)
-	content = models.TextField()
-	receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+    raison = models.CharField(max_length=200)
+    content = models.TextField()
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE)
+
 
 class Message(models.Model):
-	objet = models.CharField(max_length=200, verbose_name=_("Objet du message"))
-	author = models.ForeignKey(User, on_delete=models.CASCADE)
-	date_message = models.DateTimeField(auto_now_add=True, verbose_name=_("Date d'envoi du message"))
-	content = models.TextField(verbose_name=_("Contenu du message"))
-	receiver =  models.ForeignKey(User, on_delete=models.CASCADE)
+    objet = models.CharField(max_length=200, verbose_name=_("Objet du message"))
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name=_("a_envoye"))
+    date_message = models.DateTimeField(auto_now_add=True, verbose_name=_("Date d'envoi du message"))
+    content = models.TextField(verbose_name=_("Contenu du message"))
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name=_("a_recu"))
